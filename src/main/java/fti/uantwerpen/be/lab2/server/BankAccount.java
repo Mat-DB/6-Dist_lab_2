@@ -1,9 +1,6 @@
 package fti.uantwerpen.be.lab2.server;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +20,8 @@ public class BankAccount {
     private List<String> names = new ArrayList<>();
     private double balance;
     private AccountType type;
+    @Version
+    private long version;
 
     BankAccount(String name, double balance) {
         this.names.add(name);
