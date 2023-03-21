@@ -13,7 +13,7 @@ public class BankController {
     private final BankAccountRepository repository;
 
     // This is a constructor. It is called when a new BankController object is created.
-    public BankController(BankAccountRepository repository) {
+    BankController(BankAccountRepository repository) {
         this.repository = repository;
     }
 
@@ -36,7 +36,7 @@ public class BankController {
      */
     @GetMapping("/account/getBalance") // /account/getBalance?name={name}
     public double getBalance(@RequestParam String name) {
-        BankAccount account = repository.findByName(name).orElseThrow(() -> new BankAccountNotFoundException(name));
+        BankAccount account = repository.findByNames(name).orElseThrow(() -> new BankAccountNotFoundException(name));
         return account.getBalance();
     }
 
@@ -50,7 +50,7 @@ public class BankController {
     public String addMoney(@RequestParam Map<String, String> info) {
         String name = info.get("name");
         double amount = Double.parseDouble(info.get("amount"));
-        BankAccount account = repository.findByName(name).orElseThrow(() -> new BankAccountNotFoundException(name));
+        BankAccount account = repository.findByNames(name).orElseThrow(() -> new BankAccountNotFoundException(name));
         account.setBalance(account.getBalance() + amount);
         repository.save(account);
         return "New balance is " + account.getBalance();
@@ -66,7 +66,7 @@ public class BankController {
     public String removeMoney(@RequestParam Map<String, String> info) {
         String name = info.get("name");
         double amount = Double.parseDouble(info.get("amount"));
-        BankAccount account = repository.findByName(name).orElseThrow(() -> new BankAccountNotFoundException(name));
+        BankAccount account = repository.findByNames(name).orElseThrow(() -> new BankAccountNotFoundException(name));
         account.setBalance(account.getBalance() - amount);
         repository.save(account);
         return "New balance is " + account.getBalance();

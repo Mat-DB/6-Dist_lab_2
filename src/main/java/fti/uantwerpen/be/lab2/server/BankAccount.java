@@ -1,5 +1,6 @@
 package fti.uantwerpen.be.lab2.server;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -8,41 +9,52 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Getter @Setter @NoArgsConstructor
 public class BankAccount {
+    enum AccountType {SHARED, SINGLE}
 
     private @Id @GeneratedValue Long id;
-    private String name;
+    @ElementCollection
+    private List<String> names = new ArrayList<>();
     private double balance;
+    private AccountType type;
 
-    public BankAccount(String name, double balance) {
-        this.name = name;
+    BankAccount(String name, double balance) {
+        this.names.add(name);
         this.balance = balance;
+        this.type = AccountType.SINGLE;
+    }
+
+    BankAccount(List<String> names, double balance) {
+        this.names.addAll(names);
+        this.balance = balance;
+        this.type = AccountType.SHARED;
     }
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o)
             return true;
         if (!(o instanceof BankAccount))
             return false;
         BankAccount bankAccount = (BankAccount) o;
-        return Objects.equals(this.id, bankAccount.id) && Objects.equals(this.name, bankAccount.name)
-                && Objects.equals(this.balance, bankAccount.balance);
+        return Objects.equals(this.id, bankAccount.id) && Objects.equals(this.names, bankAccount.names)
+                && Objects.equals(this.balance, bankAccount.balance) && Objects.equals(this.type, bankAccount.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.name, this.balance);
+        return Objects.hash(this.id, this.names, this.balance, this.type);
     }
 
     @Override
     public String toString() {
-        return "BankAccount{" + "id=" + this.id + ", name='" + this.name + '\'' + ", balance='" + this.balance + '\'' + '}';
+        return "BankAccount{" + "id=" + this.id + ", name='" + this.names + '\'' + ", balance='" + this.balance + '\'' + "account type='" + this.type + '}';
     }
 
 }

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
-    Optional<BankAccount> findByName(String name);
+    Optional<BankAccount> findByNames(String name);
 }
 
