@@ -29,7 +29,7 @@ public class Client2 implements Runnable {
 
     public double getBalance() {
         try {
-            return restTemplate.getForObject(base_url + "account/" + this.name + "/account-type/" + this.accountType + "/get-balance", double.class, this.name);
+            return restTemplate.getForObject(base_url + "account/" + this.name + "/account-type/" + this.accountType + "/balance", double.class, this.name);
         } catch (Exception e) {
             System.out.println("Error while getting balance of " + this.name + "and account type " + this.accountType);
             e.printStackTrace();

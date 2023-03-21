@@ -37,7 +37,7 @@ public class BankController {
      * @param name The name of the account to get the balance of.
      * @return A Double
      */
-    @GetMapping("/account/{name}/account-type/{accountType}/get-balance")
+    @GetMapping("/account/{name}/account-type/{accountType}/balance")
     @ResponseBody
     public double getBalance(@PathVariable String name, @PathVariable BankAccount.AccountType accountType) {
         BankAccount account = repository.findByNamesAndType(name, accountType).orElseThrow(() -> new BankAccountNotFoundException(name, accountType));
