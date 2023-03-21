@@ -2,9 +2,9 @@ package fti.uantwerpen.be.lab2.client;
 
 public class ClientMain {
     public static void main(String[] args) {
-        Client client0 = new Client("Femke", "single");
-        Client client1 = new Client("Daan", "shared");
-        Client client2 = new Client("Lars", "shared");
+        Client1 client0 = new Client1("Femke", "single");
+        Client1 client1 = new Client1("Daan", "shared");
+        Client2 client2 = new Client2("Lars", "shared");
 
         Thread threadClient0 = new Thread(client0);
         Thread threadClient1 = new Thread(client1);

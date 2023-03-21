@@ -1,5 +1,9 @@
 package fti.uantwerpen.be.lab2.server;
 
+import org.hibernate.dialect.lock.OptimisticEntityLockException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class BankController {
     // This is a private variable that is used to store the BankAccountRepository object.
     private final BankAccountRepository repository;
+    private static final Logger log = LoggerFactory.getLogger(BankController.class);
 
     // This is a constructor. It is called when a new BankController object is created.
     BankController(BankAccountRepository repository) {
@@ -52,8 +57,14 @@ public class BankController {
     @ResponseBody
     public String addMoney(@PathVariable String name, @PathVariable Double amount, @PathVariable BankAccount.AccountType accountType) {
         BankAccount account = repository.findByNamesAndType(name, accountType).orElseThrow(() -> new BankAccountNotFoundException(name, accountType));
-        account.setBalance(account.getBalance() + amount);
-        repository.save(account);
+        try {
+            account.setBalance(account.getBalance() + amount);
+            repository.save(account);
+        } catch (OptimisticEntityLockException e) {
+            log.info("Concurrency failure: " + e);
+            e.printStackTrace();
+        }
+        log.info("Added " + amount + " from " + name);
         return "New balance is " + account.getBalance();
     }
 
@@ -68,8 +79,13 @@ public class BankController {
     @ResponseBody
     public String removeMoney(@PathVariable String name, @PathVariable Double amount, @PathVariable BankAccount.AccountType accountType) {
         BankAccount account = repository.findByNamesAndType(name, accountType).orElseThrow(() -> new BankAccountNotFoundException(name, accountType));
-        account.setBalance(account.getBalance() - amount);
-        repository.save(account);
+        try {
+            account.setBalance(account.getBalance() - amount);
+            repository.save(account);
+        } catch (OptimisticEntityLockException e) {
+            log.info("Concurrency failure: " + e);
+            e.printStackTrace();
+        }
         return "New balance is " + account.getBalance();
     }
 }

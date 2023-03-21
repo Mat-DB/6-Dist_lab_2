@@ -2,13 +2,13 @@ package fti.uantwerpen.be.lab2.client;
 
 import org.springframework.web.client.RestTemplate;
 
-public class Client implements Runnable {
+public class Client1 implements Runnable {
     private static final String base_url = "http://localhost:8080/";
     private final String name;
     private final RestTemplate restTemplate;
     private final String accountType;
 
-    public Client(String name, String accountType) {
+    public Client1(String name, String accountType) {
         this.name = name;
         this.restTemplate = new RestTemplate();
         this.accountType = accountType;
@@ -16,7 +16,7 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
-        for (int i=0; i<10; i++){
+        for (int i=0; i<5; i++){
             System.out.println("Balance for " + this.name + " is " + getBalance());
             addMoney(10);
             System.out.println("Balance for " + this.name + " is " + getBalance());
