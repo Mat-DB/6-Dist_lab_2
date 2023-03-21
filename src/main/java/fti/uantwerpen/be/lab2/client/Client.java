@@ -16,7 +16,15 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
-        System.out.println(getBalance());
+        for (int i=0; i<10; i++){
+            System.out.println("Balance for " + this.name + " is " + getBalance());
+            addMoney(10);
+            System.out.println("Balance for " + this.name + " is " + getBalance());
+            addMoney(15);
+            System.out.println("Balance for " + this.name + " is " + getBalance());
+            removeMoney(20);
+            System.out.println("Balance for " + this.name + " is " + getBalance());
+        }
     }
 
     public double getBalance() {
@@ -31,7 +39,7 @@ public class Client implements Runnable {
 
     public void addMoney(double amount) {
         try {
-            restTemplate.put(base_url + "account/" + this.name + "/add-money?amount=" + amount, null);
+            restTemplate.put(base_url + "account/" + this.name + "/account-type/" + this.accountType + "/add-money/" + amount, null);
             System.out.println("Added " + amount + " to account of " + this.name);
         } catch (Exception e) {
             System.out.println("Error while adding money to " + this.name);
@@ -41,7 +49,7 @@ public class Client implements Runnable {
 
     public void removeMoney(double amount) {
         try {
-            restTemplate.put(base_url + "account/" + this.name + "/remove-money?amount=" + amount, null);
+            restTemplate.put(base_url + "account/" + this.name + "/account-type/" + this.accountType + "/remove-money/" + amount, null);
             System.out.println("Removed " + amount + " from account of " + this.name);
         } catch (Exception e) {
             System.out.println("Error while removing money from " + this.name);

@@ -15,7 +15,7 @@ class LoadBankDatabase {
     @Bean
     CommandLineRunner initDatabase(BankAccountRepository repository) {
         return args -> {
-            log.info("Preloading " + repository.save(new BankAccount("Femke", 50)));
+            log.info("Preloading " + repository.save(new BankAccount("Femke", 100)));
             log.info("Preloading " + repository.save(new BankAccount("Thijs", 50)));
             log.info("Preloading " + repository.save(new BankAccount("Lotte", 50)));
             log.info("Preloading " + repository.save(new BankAccount("Daan", 50)));
