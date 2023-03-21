@@ -16,7 +16,7 @@ import java.util.Objects;
 @Entity
 @Getter @Setter @NoArgsConstructor
 public class BankAccount {
-    enum AccountType {SHARED, SINGLE}
+    enum AccountType {shared, single}
 
     private @Id @GeneratedValue Long id;
     @ElementCollection
@@ -27,13 +27,13 @@ public class BankAccount {
     BankAccount(String name, double balance) {
         this.names.add(name);
         this.balance = balance;
-        this.type = AccountType.SINGLE;
+        this.type = AccountType.single;
     }
 
     BankAccount(List<String> names, double balance) {
         this.names.addAll(names);
         this.balance = balance;
-        this.type = AccountType.SHARED;
+        this.type = AccountType.shared;
     }
 
     @Override

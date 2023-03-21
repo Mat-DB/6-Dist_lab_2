@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 class LoadBankDatabase {
@@ -16,10 +15,11 @@ class LoadBankDatabase {
     @Bean
     CommandLineRunner initDatabase(BankAccountRepository repository) {
         return args -> {
-            log.info("Preloading " + repository.save(new BankAccount("Jan", 50)));
-            log.info("Preloading " + repository.save(new BankAccount("Mike", 50)));
-            log.info("Preloading " + repository.save(new BankAccount("Lukas", 50)));
-            log.info("Preloading " + repository.save(new BankAccount(Arrays.asList("Matthias", "Ibe"), 100)));
+            log.info("Preloading " + repository.save(new BankAccount("Femke", 50)));
+            log.info("Preloading " + repository.save(new BankAccount("Thijs", 50)));
+            //log.info("Preloading " + repository.save(new BankAccount("Lotte", 50)));
+            log.info("Preloading " + repository.save(new BankAccount("Daan", 50)));
+            log.info("Preloading " + repository.save(new BankAccount(Arrays.asList("Daan", "Lars"), 100)));
         };
     }
 }

@@ -2,7 +2,7 @@ package fti.uantwerpen.be.lab2.server;
 
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.Optional;
 
 /**
  * > The BankController class is a Spring Boot controller that exposes a REST API for the BankAccountRepository class.
@@ -35,10 +35,18 @@ public class BankController {
      * @param name The name of the account to get the balance of.
      * @return A Double
      */
-    @GetMapping("/account/{name}/get-balance") // /account/getBalance?name={name}
+    @GetMapping(value = {"/account/{name}/get-balance/{type}", "/account/{name}/get-balance"}) // /account/getBalance?name={name}
+    //@GetMapping("/account/{name}/get-balance") // /account/getBalance?name={name}
     @ResponseBody
-    public double getBalance(@PathVariable String name) {
-        BankAccount account = repository.findByNames(name).orElseThrow(() -> new BankAccountNotFoundException(name));
+    public double getBalance(@PathVariable String name, @PathVariable(required = false) Optional<BankAccount.AccountType> type) {
+        BankAccount.AccountType accountType;
+        if (type.isEmpty()) {
+            accountType = BankAccount.AccountType.single;
+        }
+        else {
+            accountType = type.get();
+        }
+        BankAccount account = repository.findByNamesAndType(name, accountType).orElseThrow(() -> new BankAccountNotFoundException(name));
         return account.getBalance();
     }
 
@@ -57,7 +65,6 @@ public class BankController {
         repository.save(account);
         return "New balance is " + account.getBalance();
     }
-
 
     /**
      * If the account exists, remove money from the account with the given name.
