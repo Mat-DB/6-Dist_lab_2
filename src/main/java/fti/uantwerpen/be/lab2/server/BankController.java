@@ -2,8 +2,6 @@ package fti.uantwerpen.be.lab2.server;
 
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 /**
  * > The BankController class is a Spring Boot controller that exposes a REST API for the BankAccountRepository class.
  */
@@ -30,23 +28,16 @@ public class BankController {
     }
 
     /**
-     * Get the balance of the account with the given name.
+     * Get the balance of the account with the given name and type.
+     * When the type is not specified the assumption wil be made that the account is from the type single.
      *
      * @param name The name of the account to get the balance of.
      * @return A Double
      */
-    @GetMapping(value = {"/account/{name}/get-balance/{type}", "/account/{name}/get-balance"}) // /account/getBalance?name={name}
-    //@GetMapping("/account/{name}/get-balance") // /account/getBalance?name={name}
+    @GetMapping("/account/{name}/account-type/{accountType}/get-balance")
     @ResponseBody
-    public double getBalance(@PathVariable String name, @PathVariable(required = false) Optional<BankAccount.AccountType> type) {
-        BankAccount.AccountType accountType;
-        if (type.isEmpty()) {
-            accountType = BankAccount.AccountType.single;
-        }
-        else {
-            accountType = type.get();
-        }
-        BankAccount account = repository.findByNamesAndType(name, accountType).orElseThrow(() -> new BankAccountNotFoundException(name));
+    public double getBalance(@PathVariable String name, @PathVariable BankAccount.AccountType accountType) {
+        BankAccount account = repository.findByNamesAndType(name, accountType).orElseThrow(() -> new BankAccountNotFoundException(name, accountType));
         return account.getBalance();
     }
 
@@ -57,10 +48,10 @@ public class BankController {
      * @param amount The amount of money to add to the account.
      * @return A String
      */
-    @PutMapping("/account/{name}/add-money/{amount}") // /account/addMoney?name={name}&amount={amount}
+    @PutMapping("/account/{name}/account-type/{accountType}/add-money/{amount}")
     @ResponseBody
-    public String addMoney(@PathVariable String name, @PathVariable Double amount) {
-        BankAccount account = repository.findByNames(name).orElseThrow(() -> new BankAccountNotFoundException(name));
+    public String addMoney(@PathVariable String name, @PathVariable Double amount, @PathVariable BankAccount.AccountType accountType) {
+        BankAccount account = repository.findByNamesAndType(name, accountType).orElseThrow(() -> new BankAccountNotFoundException(name, accountType));
         account.setBalance(account.getBalance() + amount);
         repository.save(account);
         return "New balance is " + account.getBalance();
@@ -73,13 +64,12 @@ public class BankController {
      * @param amount The amount of money to remove from the account.
      * @return A String
      */
-    @PutMapping("/account/{name}/remove-money/{amount}") // /account/removeMoney?name={name}&amount={amount}
+    @PutMapping("/account/{name}/account-type/{accountType}/remove-money/{amount}")
     @ResponseBody
-    public String removeMoney(@PathVariable String name, @PathVariable Double amount) {
-        BankAccount account = repository.findByNames(name).orElseThrow(() -> new BankAccountNotFoundException(name));
+    public String removeMoney(@PathVariable String name, @PathVariable Double amount, @PathVariable BankAccount.AccountType accountType) {
+        BankAccount account = repository.findByNamesAndType(name, accountType).orElseThrow(() -> new BankAccountNotFoundException(name, accountType));
         account.setBalance(account.getBalance() - amount);
         repository.save(account);
         return "New balance is " + account.getBalance();
     }
-
 }

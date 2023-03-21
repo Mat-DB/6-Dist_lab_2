@@ -17,7 +17,7 @@ class LoadBankDatabase {
         return args -> {
             log.info("Preloading " + repository.save(new BankAccount("Femke", 50)));
             log.info("Preloading " + repository.save(new BankAccount("Thijs", 50)));
-            //log.info("Preloading " + repository.save(new BankAccount("Lotte", 50)));
+            log.info("Preloading " + repository.save(new BankAccount("Lotte", 50)));
             log.info("Preloading " + repository.save(new BankAccount("Daan", 50)));
             log.info("Preloading " + repository.save(new BankAccount(Arrays.asList("Daan", "Lars"), 100)));
         };
