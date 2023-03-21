@@ -1,9 +1,7 @@
 package fti.uantwerpen.be.lab2.server;
 
-import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -60,9 +58,9 @@ public class BankController {
         try {
             account.setBalance(account.getBalance() + amount);
             repository.save(account);
-        } catch (OptimisticEntityLockException e) {
+        } catch (Exception e) {
             log.info("Concurrency failure: " + e);
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         log.info("Added " + amount + " from " + name);
         return "New balance is " + account.getBalance();
@@ -82,9 +80,9 @@ public class BankController {
         try {
             account.setBalance(account.getBalance() - amount);
             repository.save(account);
-        } catch (OptimisticEntityLockException e) {
+        } catch (Exception e) {
             log.info("Concurrency failure: " + e);
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return "New balance is " + account.getBalance();
     }
