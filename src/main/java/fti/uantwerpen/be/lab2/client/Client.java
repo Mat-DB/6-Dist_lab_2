@@ -1,5 +1,52 @@
 package fti.uantwerpen.be.lab2.client;
 
-public class Client {
+import org.springframework.web.client.RestTemplate;
 
+public class Client implements Runnable {
+    private static final String base_url = "http://localhost:8080/";
+    private final String name;
+    private final RestTemplate restTemplate;
+    private final String accountType;
+
+    public Client(String name, String accountType) {
+        this.name = name;
+        this.restTemplate = new RestTemplate();
+        this.accountType = accountType;
+    }
+
+    @Override
+    public void run() {
+        System.out.println(getBalance());
+    }
+
+    public double getBalance() {
+        try {
+            return restTemplate.getForObject(base_url + "account/" + this.name + "/account-type/" + this.accountType + "/get-balance", double.class, this.name);
+        } catch (Exception e) {
+            System.out.println("Error while getting balance of " + this.name + "and account type " + this.accountType);
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public void addMoney(double amount) {
+        try {
+            restTemplate.put(base_url + "account/" + this.name + "/add-money?amount=" + amount, null);
+            System.out.println("Added " + amount + " to account of " + this.name);
+        } catch (Exception e) {
+            System.out.println("Error while adding money to " + this.name);
+            e.printStackTrace();
+        }
+    }
+
+    public void removeMoney(double amount) {
+        try {
+            restTemplate.put(base_url + "account/" + this.name + "/remove-money?amount=" + amount, null);
+            System.out.println("Removed " + amount + " from account of " + this.name);
+        } catch (Exception e) {
+            System.out.println("Error while removing money from " + this.name);
+            e.printStackTrace();
+        }
+
+    }
 }
